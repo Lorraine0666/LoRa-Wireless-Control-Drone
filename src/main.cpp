@@ -5,7 +5,7 @@
 #include <Wire.h>
 #include <imu.h>
 #include <SPI.h>
-#include "LoRa.h"  // 引入LoRa库
+#include <LoRa.h>  // 引入LoRa库
 
 extern float roll;
 extern float pitch;
@@ -21,7 +21,7 @@ void setup() {
   Serial1.begin(115200);
 
   // 初始化LoRa模块
-  SPI.begin(SS_PIN);
+  SPI.begin();
   LoRa.setPins(SS_PIN, RST_PIN, DI0_PIN);
   if (!LoRa.begin(433E6)) { // 设置LoRa频率为433MHz
     Serial1.println("LoRa初始化失败");

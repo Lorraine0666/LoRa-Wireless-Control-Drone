@@ -7,12 +7,12 @@
 #define RST_PIN 9
 #define DI0_PIN 2
 
-void setup() {
+void send_setup() {
   Serial.begin(115200); // 初始化串口
   while (!Serial) delay(10); // 等待串口连接
 
   // 初始化LoRa模块
-  SPI.begin(SS_PIN);
+  SPI.begin();
   LoRa.setPins(SS_PIN, RST_PIN, DI0_PIN);
   if (!LoRa.begin(433E6)) { // 设置LoRa频率为433MHz
     Serial.println("LoRa初始化失败");
@@ -21,7 +21,7 @@ void setup() {
   Serial.println("LoRa初始化成功");
 }
 
-void loop() {
+void send_loop() {
   if (Serial.available()) { // 检查串口是否有指令输入
     char command = Serial.read(); // 从串口读取指令
     if (command == 'A' || command == 'S') { // 仅处理有效指令
