@@ -3,4 +3,6 @@
 
 void config_setup();
 
+extern int motor_num;
+
 #endif

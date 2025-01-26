@@ -4,6 +4,8 @@
 
 HardwareSerial Serial1(RX1, TX1);
 
+int motor_num = 4;
+
 void config_setup() {
   // initialize PWM pins
   // PWM pins are for motor
