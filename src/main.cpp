@@ -1,5 +1,5 @@
+#include "port.h"
 #include <Arduino.h>
-#include <port.h>
 #include <MPU6500_WE.h>
 #include <Wire.h>
 #include <imu.h>
@@ -26,8 +26,7 @@ void loop() {
     // 例如，如果接收到 'A'，执行动作 1
     if (receivedChar == 'A') {
       cur_state = 1;
-    }
-    else if(receivedChar == 'S')
+    } else if (receivedChar == 'S')
       cur_state = 0;
   }
 
@@ -43,7 +42,7 @@ void loop() {
     analogWrite(PWM3, 0);
     analogWrite(PWM4, 0);
   }
-  
+
   calculateEular();
   Serial1.print("Eular Angle x, y:");
   Serial1.print(roll);
@@ -52,5 +51,4 @@ void loop() {
   Serial1.print("State Now:");
   Serial1.print(cur_state);
   delay(100);
-
 }
