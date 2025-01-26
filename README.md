@@ -1,1 +1,0 @@
-# LoRa-Wireless-Control-Drone
