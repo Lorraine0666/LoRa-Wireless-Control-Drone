@@ -6,30 +6,38 @@
 
 MPU6500_WE myMPU6500 = MPU6500_WE(MPU6500_ADDR);
 
-/*计算偏移量*/
-float i; // 计算偏移量时的循环次数
+// calculate offset
+// a variable to keep record the time of loops
+float loop_times;
 
-/*参数*/
-float rad2deg = 57.29578;      // 弧度到角度的换算系数
-float roll_v = 0, pitch_v = 0; // 换算到x,y轴上的角速度
+// parameters
+// radian to angle conversion factor
+float rad2deg = 57.29578;
+// angular speed on x-axis and y-axis
+float roll_v = 0, pitch_v = 0;
 
-/*定义微分时间*/
-float now = 0, lasttime = 0, dt = 0; // 定义微分时间
+// define differential time
+float now = 0, last_time = 0, dt = 0;
 
-/*三个状态，先验状态，观测状态，最优估计状态*/
-float gyro_roll = 0, gyro_pitch = 0; // 陀螺仪积分计算出的角度，先验状态
-float acc_roll = 0, acc_pitch = 0; // 加速度计观测出的角度，观测状态
-float k_roll = 0, k_pitch = 0; // 卡尔曼滤波后估计出最优角度，最优估计状态
+// three states
+// - priori state
+//   - angle calculated by gyroscope integration
+float gyro_roll = 0, gyro_pitch = 0;
+// - observation state
+//   - angle observed by accelerometer
+float acc_roll = 0, acc_pitch = 0;
+// - optimal estimation state
+//   - best-estimated angle by Kalman filter
+float k_roll = 0, k_pitch = 0;
 
 float roll = 0, pitch = 0;
 
-/*误差协方差矩阵P*/
-float e_P[2][2] = {
-    {1, 0},
-    {0, 1}}; // 误差协方差矩阵，这里的e_P既是先验估计的P，也是最后更新的P
+// Error Covariance Matrix
+// for both priori estimation stage and posterior estimation stage
+float e_P[2][2] = {{1, 0}, {0, 1}};
 
-/*卡尔曼增益K*/
-float k_k[2][2] = {{0, 0}, {0, 0}}; // 这里的卡尔曼增益矩阵K是一个2X2的方阵
+// Kalman Gain Matrix
+float k_k[2][2] = {{0, 0}, {0, 0}};
 
 void imu_setup() {
   Wire.setSCL(I2C_SCL);
@@ -64,17 +72,17 @@ void calculateEular() {
   float resultantG = myMPU6500.getResultantG(gValue);
 
   /*计算微分时间*/
-  now = millis();                 // 当前时间(ms)
-  dt = (now - lasttime) / 1000.0; // 微分时间(s)
-  lasttime = now;                 // 上一次采样时间(ms)
+  now = millis();                  // 当前时间(ms)
+  dt = (now - last_time) / 1000.0; // 微分时间(s)
+  last_time = now;                 // 上一次采样时间(ms)
 
   /*step1:利用陀螺仪获得角速度对欧拉角的估计值 */
   roll_v =
       gyr.x + ((sin(k_pitch) * sin(k_roll)) / cos(k_pitch)) * gyr.y +
       ((sin(k_pitch) * cos(k_roll)) / cos(k_pitch)) * gyr.z; // roll轴的角速度
-  pitch_v = cos(k_roll) * gyr.y - sin(k_roll) * gyr.z; // pitch轴的角速度
-  gyro_roll = k_roll + dt * roll_v;                    // 先验roll角度
-  gyro_pitch = k_pitch + dt * pitch_v;                 // 先验pitch角度
+  pitch_v = cos(k_roll) * gyr.y - sin(k_roll) * gyr.z;       // pitch轴的角速度
+  gyro_roll = k_roll + dt * roll_v;                          // 先验roll角度
+  gyro_pitch = k_pitch + dt * pitch_v;                       // 先验pitch角度
 
   /*step2:计算先验误差协方差矩阵P*/ // 这里的Q矩阵是一个对角阵且对角元均为0.0025
   e_P[0][0] = e_P[0][0] + 0.0025;
