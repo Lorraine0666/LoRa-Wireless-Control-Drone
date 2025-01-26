@@ -30,6 +30,7 @@ void setup() {
   pinMode(PWM2, OUTPUT);
   pinMode(PWM3, OUTPUT);
   pinMode(PWM4, OUTPUT);
+  pinMode(LED1, OUTPUT);
 
   Serial2.println("HC-14 初始化完成");
 }
@@ -79,6 +80,4 @@ void loop() {
   delay(1000);
   digitalWrite(LED1, LOW);
   delay(1000);
-
-  delay(100);
 }

@@ -35,6 +35,7 @@ float gyro_roll = 0, gyro_pitch = 0;
 // angle observed by accelerometer, which is observation status
 // 加速度计观测出的角度，观测状态
 float acc_roll = 0, acc_pitch = 0;
+// best-estimated angle by Kalman filter
 float k_roll = 0, k_pitch = 0; // 卡尔曼滤波后估计出最优角度，最优估计状态
 
 float roll = 0, pitch = 0;
