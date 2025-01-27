@@ -1,0 +1,3 @@
+[submodule "UAV_control"]
+    path = UAV_control
+    url = git@github.com:TangJingfan/UAV_control.git
