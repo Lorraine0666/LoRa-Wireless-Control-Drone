@@ -14,7 +14,7 @@ The system consists of the following components:
 - Four motors
 - Battery
 
-Refer to the provided diagram for the physical layout.
+Please refer to the image below for the physical layout of the system.
 
 ![UAV ME Design](./images/UAV.jpg)
 
@@ -23,6 +23,12 @@ Refer to the provided diagram for the physical layout.
 - **M2**: Clockwise
 - **M3**: Clockwise
 - **M4**: Counterclockwise
+
+### HC14 & Testing Board
+
+The HC-14 module must be connected to the testing board in a specific configuration. Please refer to the image below for the correct setup.
+
+![HC14 & Testing Board](./images/HC14&TestingBoard.jpg)
 
 ---
 
