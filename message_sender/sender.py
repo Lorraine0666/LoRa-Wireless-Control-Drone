@@ -1,5 +1,7 @@
 import serial
 
+# get input message for baudrate
+# just a helper function 
 def get_input(prompt, cast_type, valid_range=None):
     """Helper function to get valid input from the user."""
     while True:
@@ -12,16 +14,11 @@ def get_input(prompt, cast_type, valid_range=None):
         except ValueError:
             print("Invalid number, please enter a valid value.")
 
-
+# * 1. get serial port information from terminal
 port = input("Please enter the serial port (e.g., /dev/ttyUSB0 or COMx): ")
 baudrate = get_input("Please input baudrate (e.g., 9600): ", int, valid_range=range(1, 1000000))
 
-
-roll = get_input("Please input roll: ", float)
-pitch = get_input("Please input pitch: ", float)
-yaw = get_input("Please input yaw: ", float)
-
-
+# * 2. open serial
 try:
     ser = serial.Serial(port=port, 
                         baudrate=baudrate,
@@ -33,7 +30,35 @@ try:
 except serial.SerialException as e:
     print(f"Failed to open serial port {port}: {e}")
 
-
+# * 3. send AT command to set serial
 if ser.is_open:
+    # TODO: send AT command according to HC-T串口助手
+    # ! need to change the following lines
     ser.close()
     print(f"Serial port {port} closed.")
+
+
+while True:
+    try:
+        # * 4. receive command from terminal
+        yaw = float(input("Please input yaw value: "))
+        pitch = float(input("Please input pitch value: "))
+        roll = float(input("Please input roll value: "))
+
+        # * 5. concatenate string
+        command = f"<y:{yaw},p:{pitch},r:{roll}>"
+        print(f"Sending command: {command}")
+
+        # * 6. send message 
+        ser.write(command.encode())
+
+    except ValueError:
+        print("Invalid input!")
+    except KeyboardInterrupt:
+        print("Abort!")
+        break 
+    except Exception as e:
+        print(f"Error happen: {e}")
+        break 
+
+ser.close()
